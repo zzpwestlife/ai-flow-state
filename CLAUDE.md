@@ -15,6 +15,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 - **Atomic Execution (原子化执行)**: 每次交互仅执行**一个**步骤 (Step) 或任务阶段 (Phase)。严禁跨越自动执行。
 - **Interactive Handoff (交互式交接)**: 每个 Step/Phase 结束后，**必须**展示 TUI 菜单并等待用户指令。
 - **Interactive Navigation (交互式导航)**: 所有的 Handoff 必须使用 `AskUserQuestion` 提供方向键选择，然后自动提议下一步，确保用户只需使用 **方向键 + Enter** 即可继续。
+- **Resilient Recovery (弹性恢复)**: 即使在执行过程中遇到错误或中断（如 Code Review 发现问题），一旦修复完成，**必须**立即恢复交互式导航，通过 `AskUserQuestion` 提供下一步选项，绝不让用户退回到手动输入模式。
 - **File-First (文件优先)**: 所有长内容（>10 行）必须写入文件，聊天窗口仅保留摘要。 
 - **Source of Truth (单一真理)**: `task_plan.md` 是任务状态的唯一真理。必须先更新文件，再宣称 Phase 完成。
 
@@ -103,9 +104,19 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
      - **Action**: Propose `/changelog-generator`
   2. **Fix Issues**
      - **Label**: `Fix Issues (修复问题)`
+     - **Action**: Propose `/planning-with-files plan` (to plan fixes)
+
+### 3.6 Error Recovery & Fix Loop (通用修复循环)
+- **Trigger**: 错误修复完成 (Fix Applied) 或 审查问题已解决 (Issues Resolved)。
+- **Menu Options**:
+  1. **Resume / Retry**
+     - **Label**: `Resume Workflow (恢复流程)` / `Re-run Review (重新审查)`
+     - **Action**: Propose previous command (e.g. `/planning-with-files execute` or `/review-code`)
+  2. **Manual Check**
+     - **Label**: `Manual Check (手动检查)`
      - **Action**: Wait for user input
 
-### 3.6 Step 5: Changelog -> Commit
+### 3.7 Step 5: Changelog -> Commit
 - **Trigger**: CHANGELOG.md 更新完毕。
 - **Menu Options**:
   1. **Generate Commit Message**

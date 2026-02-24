@@ -77,6 +77,12 @@ type(scope): subject
 
 ## 4. 提交引导 (Commit Handoff)
 
+**IMPORTANT**: Since auto-commit is restricted, you MUST display the command for easy copying.
+
+```bash
+git commit -m "..."
+```
+
 1.  **Reflective Handoff (Interactive Menu)**:
     -   **Mandatory**: You **MUST** use `AskUserQuestion` to present options (support bilingual).
     -   **Question**: `Commit Message 已生成。请手动复制并提交。下一步？`

@@ -106,9 +106,9 @@ if [ "$COMPLETE" -gt "$PREV_COMPLETE" ]; then
     echo ""
     echo "🛑🛑🛑 STOP EXECUTION NOW 🛑🛑🛑"
     echo "Phase $COMPLETE is marked as COMPLETE."
-    echo "You have reached a MANDATORY STOP POINT."
-    echo "DO NOT PROCEED to Phase $(($COMPLETE + 1))."
-    echo "WAIT for user instruction."
+    echo "ACTION REQUIRED: You MUST use AskUserQuestion to present the 'Continue Execution' menu."
+    echo "Options: [Continue to Phase $(($COMPLETE + 1))] [Pause / Review]"
+    echo "DO NOT automatically proceed."
     exit 0
 fi
 

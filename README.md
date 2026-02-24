@@ -134,6 +134,7 @@ graph TD
     -   **Visual Progress**: 全程可视化进度条，让你时刻掌握当前所处阶段。
     -   **Socratic Method**: 在关键决策点（如规划前、提交前）主动进行苏格拉底式提问，确保你考虑周全，而不是盲目执行。
 -   **交互式导航 (Interactive Navigation)**: 你不需要手动输入复杂的指令，只需使用**方向键**选择并按 `Enter` (或 Tab+Enter) 确认，流程就会自动向下流动。
+-   **弹性恢复 (Resilient Recovery)**: 即使在流程中遇到错误（如 Code Review 发现问题），一旦修复完成，系统应立即恢复引导。**必须**通过方向键+Enter 即可继续下一步，绝不让用户退回到手动输入命令的原始状态。
 -   **把控权 (Control in Flow)**:
     -   **Mandatory Review**: 在规划完成后，强制暂停供你审查方案。
     -   **Atomic Execution**: 每个开发阶段（Phase）原子化执行，绝不“抢跑”。
@@ -171,12 +172,22 @@ python3 -m unittest discover tests
 python3 tests/test_session_catchup.py
 ```
 
+### 3. 调试与修复工作流 (Debug & Fix Workflow)
+
+在开发过程中，如果您遇到了错误（例如 Code Review 不通过），请在修复代码后遵循**最小摩擦原则**：
+
+-   **不要**手动重新输入复杂的测试命令。
+-   **应当**利用系统的上下文恢复能力，直接使用方向键选择“重试”或“继续执行”选项。
+-   所有流程节点（包括错误处理分支）都必须支持 **方向键 + Enter** 的交互方式。
+
 ## ❓ 常见问题 (Troubleshooting)
 
 -   **Q: 为什么流程没有自动弹出下一步提示？**
     A: FlowState 依赖 Claude Code 的 `RunCommand` 提议机制。如果因为某些原因没有自动弹出，您可以手动输入 `/planning-with-files execute` 或直接按 `Enter` 键尝试。
 -   **Q: TUI 菜单显示异常？**
     A: 请确保您的终端支持 UTF-8 编码和 ANSI 转义序列（推荐使用 iTerm2, VS Code Terminal, 或 Windows Terminal）。
+-   **Q: 修复了 Code Review 提出的问题后，我该怎么做？**
+    A: 遵循**最小摩擦原则**，不需要手动输入命令。系统会自动检测到修复，并推荐下一步操作（如重新审查或继续提交）。您只需**按方向键选择并回车**即可。
 -   **Q: 如何手动触发特定阶段？**
     A: 您可以直接运行对应的子命令，例如 `/review-code` 或 `/changelog-generator`，无需严格按照流程顺序。
 
