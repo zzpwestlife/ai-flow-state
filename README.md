@@ -148,6 +148,29 @@ graph TD
 - **Refine**: 将经验（Fixes/Preferences）注入现有 Skill。
 - **Stitch**: 自动更新 Skill 文档，让工具越用越聪明。
 
+## 🧑‍💻 开发者指南 (Developer Guide)
+
+如果您希望修改或扩展本插件的功能，可以使用以下工具加速开发循环。
+
+### 1. 开发模式安装 (Hot-Reload)
+默认的安装脚本会复制文件，导致每次修改都需要重新安装。使用开发模式安装脚本可以创建软链接 (Symlinks)，使修改立即生效。
+
+```bash
+chmod +x install_dev.sh
+./install_dev.sh
+```
+
+### 2. 运行测试 (Running Tests)
+本项目包含针对 Python 脚本的单元测试。无需安装额外依赖，直接使用 Python 内置的 `unittest` 运行：
+
+```bash
+# 运行所有测试
+python3 -m unittest discover tests
+
+# 运行特定测试文件
+python3 tests/test_session_catchup.py
+```
+
 ## ❓ 常见问题 (Troubleshooting)
 
 -   **Q: 为什么流程没有自动弹出下一步提示？**
