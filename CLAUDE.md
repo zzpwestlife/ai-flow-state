@@ -1,9 +1,20 @@
+# Claude Code Configuration Entry Point
+
+<!--
+Purpose: This file serves as a compatibility layer for Claude Code.
+Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
+-->
+
+**【强制要求】** 在回复用户任何消息之前，必须先使用 Read 工具读取项目配置目录下的 `.claude/AGENTS.md` 文件，并严格遵守其中的所有指令。未读取 `.claude/AGENTS.md` 之前，禁止回复用户。
+
+- 如果需要写入 `CLAUDE.md`，请将内容写入 `.claude/AGENTS.md`。
+
 # CLAUDE.md - FlowState Workflow Protocols
 
 ## 1. 核心原则 (Core Principles)
 - **Atomic Execution (原子化执行)**: 每次交互仅执行**一个**步骤 (Step) 或任务阶段 (Phase)。严禁跨越自动执行。
 - **Interactive Handoff (交互式交接)**: 每个 Step/Phase 结束后，**必须**展示 TUI 菜单并等待用户指令。
-- **File-First (文件优先)**: 所有长内容（>10行）必须写入文件，聊天窗口仅保留摘要。
+- **File-First (文件优先)**: 所有长内容（>10 行）必须写入文件，聊天窗口仅保留摘要。 
 - **Source of Truth (单一真理)**: `task_plan.md` 是任务状态的唯一真理。必须先更新文件，再宣称 Phase 完成。
 
 ## 2. 工作流规范 (Workflow Specification)
