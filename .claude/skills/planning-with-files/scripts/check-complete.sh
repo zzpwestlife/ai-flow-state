@@ -106,9 +106,9 @@ if [ "$COMPLETE" -gt "$PREV_COMPLETE" ]; then
     echo ""
     echo "🛑🛑🛑 STOP EXECUTION NOW 🛑🛑🛑"
     echo "Phase $COMPLETE is marked as COMPLETE."
-    echo "ACTION REQUIRED: You MUST use AskUserQuestion to present the 'Continue Execution' menu."
+    echo "ACTION REQUIRED: You MUST use AskUserQuestion to present the 'Continue Execution' menu (Direction Keys + Enter)."
     echo "Options: [Continue to Phase $(($COMPLETE + 1))] [Pause / Review]"
-    echo "DO NOT automatically proceed."
+    echo "DO NOT automatically proceed. Use RunCommand(requires_approval=False) for zero friction."
     exit 0
 fi
 

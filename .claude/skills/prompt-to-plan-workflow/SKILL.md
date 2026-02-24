@@ -56,8 +56,8 @@ Use this workflow when:
   - "满意，进入规划"
   - "满意，结束"
   - "不满意，需要修改"
-- If user chooses "满意，进入规划", use `RunCommand` to propose `/planning-with-files plan`.
-- **Critical**: Do NOT auto-proceed without user approval
+- If user chooses "满意，进入规划", use `RunCommand(requires_approval=False)` to execute `/planning-with-files plan`.
+- **Critical**: Use `AskUserQuestion` for the decision, then `RunCommand` for zero-friction execution.
 
 ### Phase 2: File-Based Planning (Skill: `/planning-with-files:plan`)
 

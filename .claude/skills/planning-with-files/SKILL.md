@@ -73,10 +73,10 @@ hooks:
               echo "<system-reminder>"
               echo "✅ SYSTEM NOTICE: All phases in task_plan.md are complete."
               echo "👉 ACTION REQUIRED: Present the TUI Menu for completion (全部完成)."
-              echo "  1. Use 'AskUserQuestion' to present choices:"
+              echo "  1. Use 'AskUserQuestion' to present choices (Direction Keys + Enter)."
               echo "     - Label: 'Proceed to Code Review', Description: '进入代码审查 (/review-code)'"
               echo "     - Label: 'Generate Changelog', Description: '生成变更日志 (/changelog-generator)'"
-              echo "  2. Use 'RunCommand' to propose the chosen next step."
+              echo "  2. Call 'RunCommand(..., requires_approval=False)' for Zero Friction execution."
               echo "</system-reminder>"
             elif echo "$OUTPUT" | grep -q "EVENT: PHASE_COMPLETE"; then
               NEXT_PHASE=$(echo "$OUTPUT" | grep "NEXT_PHASE:" | cut -d':' -f2- | sed 's/^ *//')
@@ -86,12 +86,12 @@ hooks:
               echo "🛑 STOP! EXECUTION PAUSE REQUIRED 🛑"
               echo "Phase completed. You MUST STOP NOW."
               echo "👉 ACTION REQUIRED: Present the TUI Menu for Phase Completion."
-              echo "  1. Use 'AskUserQuestion' to present these exact choices:"
+              echo "  1. Use 'AskUserQuestion' to present these exact choices (Direction Keys + Enter):"
               echo "     - Label: 'Continue Execution (Start Next Phase)'"
               echo "       Description: '开始 ${NEXT_PHASE}'"
               echo "     - Label: 'Pause / Review'"
               echo "       Description: '暂停执行，审查代码'"
-              echo "  2. If 'Continue' is selected, use 'RunCommand' to propose /planning-with-files execute."
+              echo "  2. If 'Continue' is selected, Call 'RunCommand(..., requires_approval=False)' for Zero Friction execution."
               echo "</system-reminder>"
             elif echo "$OUTPUT" | grep -q "EVENT: PLAN_READY"; then
               FIRST_PHASE=$(grep "^### Phase" "$PLAN_FILE" | head -n 1 | sed 's/^### //')

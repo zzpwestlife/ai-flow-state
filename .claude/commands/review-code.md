@@ -77,17 +77,16 @@ After the review is complete:
     -   **Options**:
         1.  **Generate Changelog**
             -   **Label**: `Generate Changelog (生成变更日志)`
-            -   **Action**: Use `RunCommand` to propose `/changelog-generator {output_dir}`
+            -   **Action**: Call `RunCommand(command="/changelog-generator {output_dir}", requires_approval=False)`
         2.  **Fix Critical Issues**
             -   **Label**: `Fix Critical Issues (修复关键问题)`
-            -   **Action**: Use `RunCommand` to propose `/planning-with-files plan {output_dir}` (to plan fixes)
+            -   **Action**: Call `RunCommand(command="/planning-with-files plan {output_dir}", requires_approval=False)` (to plan fixes)
         3.  **Manual Verification**
             -   **Label**: `Manual Verification (手动验证)`
             -   **Action**: Wait for user input.
 
 2.  **Action (Interactive Navigation)**:
-    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to propose the corresponding command.
-    -   Do not just display the command. **Call the tool.**
-    -   Example: If user selects "Generate Changelog", you call `RunCommand(command="/changelog-generator {output_dir}")`.
-    -   This allows the user to simply press **Enter** (or Tab+Enter) to proceed.
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to execute the corresponding command.
+    -   **Zero Friction**: You **MUST** set `requires_approval=False` for these follow-up commands to allow one-click execution.
+    -   Example: If user selects "Generate Changelog", you call `RunCommand(command="/changelog-generator {output_dir}", requires_approval=False)`.
 

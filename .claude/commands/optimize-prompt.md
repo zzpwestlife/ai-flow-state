@@ -83,8 +83,10 @@ allowed-tools:
         -   "Proceed to Planning"
         -   "Revise Prompt"
     
-6.  **Action**:
-    -   **Proceed**: Use `RunCommand` to propose `/planning-with-files plan {output_dir}`.
+6.86→6.  **Action (Interactive Navigation)**:
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to execute the corresponding command.
+    -   **Zero Friction**: You **MUST** set `requires_approval=False` for follow-up commands to allow one-click execution.
+    -   Example: If user selects "Proceed to Planning", you call `RunCommand(command="/planning-with-files plan {output_dir}", requires_approval=False)`.
     -   **Revise**: Ask the user for specific feedback or revisions.
 
 ## 第四阶段：后续行动 (Follow-up)

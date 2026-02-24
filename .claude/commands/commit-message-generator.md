@@ -95,7 +95,7 @@ git commit -m "..."
             -   **Action**: Wait for user instructions.
 
 2.  **Action (Interactive Navigation)**:
-    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to propose the corresponding command (if applicable).
-    -   Example: If user selects "Regenerate Message", you call `RunCommand(command="/commit-message-generator")`.
-    -   This allows the user to simply press **Enter** (or Tab+Enter) to proceed.
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to execute the corresponding command.
+    -   **Zero Friction**: You **MUST** set `requires_approval=False` for follow-up commands (like regeneration).
+    -   Example: If user selects "Regenerate Message", you call `RunCommand(command="/commit-message-generator", requires_approval=False)`.
 

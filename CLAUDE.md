@@ -14,7 +14,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 ## 1. 核心原则 (Core Principles)
 - **Atomic Execution (原子化执行)**: 每次交互仅执行**一个**步骤 (Step) 或任务阶段 (Phase)。严禁跨越自动执行。
 - **Interactive Handoff (交互式交接)**: 每个 Step/Phase 结束后，**必须**展示 TUI 菜单并等待用户指令。
-- **Interactive Navigation (交互式导航)**: 所有的 Handoff 必须使用 `AskUserQuestion` 提供方向键选择，然后自动提议下一步，确保用户只需使用 **方向键 + Enter** 即可继续。
+- **Interactive Navigation (交互式导航)**: 所有的 Handoff 必须使用 `AskUserQuestion` 提供方向键选择，然后自动提议下一步。对于安全的流程转换（如进入下一阶段），应设置 `RunCommand(requires_approval=False)`，确保用户只需使用 **方向键 + Enter** 即可直接执行，无需二次确认。
 - **Resilient Recovery (弹性恢复)**: 即使在执行过程中遇到错误或中断（如 Code Review 发现问题），一旦修复完成，**必须**立即恢复交互式导航，通过 `AskUserQuestion` 提供下一步选项，绝不让用户退回到手动输入模式。
 - **File-First (文件优先)**: 所有长内容（>10 行）必须写入文件，聊天窗口仅保留摘要。 
 - **Source of Truth (单一真理)**: `task_plan.md` 是任务状态的唯一真理。必须先更新文件，再宣称 Phase 完成。
@@ -51,15 +51,15 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 
 **关键机制 (Key Mechanism): Interactive Navigation**
 1. **Ask**: 使用 `AskUserQuestion` 提供**方向键 (Arrow Keys)** 选择。
-2. **Propose**: 用户选择后，**必须**立即使用 `RunCommand` 提议下一步命令。
-3. **User Action**: 用户只需按 **Enter** (或 Tab+Enter) 即可确认执行。
+2. **Execute**: 用户选择后，**必须**立即使用 `RunCommand` 执行对应操作。
+3. **Zero Friction**: 对于标准工作流命令（如 `/plan`, `/execute`, `/review`），必须设置 `requires_approval: false`，实现**一键直达**。
 
 ### 3.1 Step 1: Optimization -> Planning
 - **Trigger**: `prompt.md` 生成完毕。
 - **Menu Options**:
   1. **Start Planning**
      - **Label**: `Start Planning (进入规划阶段)`
-     - **Action**: Propose `/planning-with-files plan`
+     - **Action**: Call `RunCommand(command="/planning-with-files plan", requires_approval=False)`
   2. **Refine Prompt**
      - **Label**: `Refine Prompt (继续优化)`
      - **Action**: Wait for user input
@@ -69,7 +69,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 - **Menu Options**:
   1. **Execute Plan**
      - **Label**: `Execute Plan (开始执行计划)`
-     - **Action**: Propose `/planning-with-files execute`
+     - **Action**: Call `RunCommand(command="/planning-with-files execute", requires_approval=False)`
   2. **Review Plan**
      - **Label**: `Review Plan (审查计划)`
      - **Action**: Wait for user input
@@ -80,7 +80,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
   1. **Continue Execution**
      - **Label**: `Continue Execution (Start Next Phase)`
      - **Description**: `开始 [Next Phase Title]` (Dynamic)
-     - **Action**: Propose `/planning-with-files execute`
+     - **Action**: Call `RunCommand(command="/planning-with-files execute", requires_approval=False)`
   2. **Pause / Review**
      - **Label**: `Pause / Review`
      - **Description**: `暂停执行，审查代码`
@@ -91,10 +91,10 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 - **Menu Options**:
   1. **Proceed to Code Review**
      - **Label**: `Proceed to Code Review (进入代码审查)`
-     - **Action**: Propose `/review-code`
+     - **Action**: Call `RunCommand(command="/review-code", requires_approval=False)`
   2. **Generate Changelog**
      - **Label**: `Generate Changelog (生成变更日志)`
-     - **Action**: Propose `/changelog-generator`
+     - **Action**: Call `RunCommand(command="/changelog-generator", requires_approval=False)`
 
 ### 3.5 Step 4: Review -> Changelog
 - **Trigger**: 代码审查报告生成完毕。
@@ -121,7 +121,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 - **Menu Options**:
   1. **Generate Commit Message**
      - **Label**: `Generate Commit Message (生成提交信息)`
-     - **Action**: Propose `/commit-message-generator`
+     - **Action**: Call `RunCommand(command="/commit-message-generator", requires_approval=False)`
   2. **Edit Changelog**
      - **Label**: `Edit Changelog (编辑日志)`
      - **Action**: Wait for user input
