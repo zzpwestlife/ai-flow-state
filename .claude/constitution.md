@@ -15,6 +15,7 @@ This constitution applies to all technology stacks under this project (Go, PHP, 
 - **1.2 (Minimal Dependencies):** Prioritize language standard libraries or mature community standard libraries. Introducing new dependencies requires rigorous evaluation.
 - **1.3 (Anti-over-engineering):** Simple functions and data structures are better than complex abstractions. Avoid over-design.
 - **1.4 (No Laziness):** Find root causes. No temporary fixes. Senior developer standards. If a fix feels hacky: "Knowing everything I know now, implement the elegant solution".
+- **1.5 (First Principles):** Solve problems by breaking them down to basic truths, not by analogy. Question "why" until the root constraint is found.
 
 ---
 
