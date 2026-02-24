@@ -9,7 +9,7 @@
 ### 前置要求 (Prerequisites)
 -   **Claude Code CLI**: 确保已安装并配置好 `claude` 命令行工具。
 -   **Python 3.8+**: 用于运行部分辅助脚本。
--   **Git**: 用于版本控制和代码提交。
+-   **Git**: 用于版本控制和代码审查。
 
 ### 快速安装 (Quick Start)
 
@@ -18,11 +18,11 @@
     ```bash
     ./install.sh
     ```
-    *(安装脚本会将插件内容安装到 `~/.claude/` 目录下)*
+    *(安装脚本会将插件内容安装到 `~/.claude/` 目录下，建议先备份原目录文件)*
 
-### 配置 (Configuration)
+### 配置[可选] (Configuration)
 
-本项目依赖 `~/.claude/settings.json` 中的钩子配置来实现自动触发。请确保您的配置文件包含以下内容（或手动合并）：
+本项目依赖 `~/.claude/settings.json` (或者 `~/.claude/ft-settings.json`) 中的钩子配置来实现自动触发。请确保您的配置文件包含以下内容（或手动合并）：
 
 ```json
 {
@@ -86,12 +86,12 @@ fib/
 ```mermaid
 graph TD
     Start["/optimize-prompt 用户提示词"] --> Optimize["交互式问答, 生成 prompt.md"]
-    Optimize -->|Tab| Plan["/planning-with-files plan<br/>(Step 2 Interview)"]
-    Plan -->|Tab| Execute["/planning-with-files execute<br/>(Atomic Execution)"]
+    Optimize -->|Select & Enter| Plan["/planning-with-files plan<br/>(Step 2 Interview)"]
+    Plan -->|Select & Enter| Execute["/planning-with-files execute<br/>(Atomic Execution)"]
     Execute -->|Loop until done| Execute
-    Execute -->|Tab| Review["/review-code<br/>(Reflective Handoff)"]
-    Review -->|Tab| Changelog["/changelog-generator<br/>(Visual Confirmation)"]
-    Changelog -->|Tab| Commit["/commit-message-generator<br/>(Reflective Selection)"]
+    Execute -->|Select & Enter| Review["/review-code<br/>(Reflective Handoff)"]
+    Review -->|Select & Enter| Changelog["/changelog-generator<br/>(Visual Confirmation)"]
+    Changelog -->|Select & Enter| Commit["/commit-message-generator<br/>(Reflective Selection)"]
     Commit --> Finish[Done]
 
     style Start fill:#f9f,stroke:#333,stroke-width:2px
@@ -133,7 +133,7 @@ graph TD
 -   **Rich Interaction & Socratic Flow (丰富的交互与苏格拉底引导)**:
     -   **Visual Progress**: 全程可视化进度条，让你时刻掌握当前所处阶段。
     -   **Socratic Method**: 在关键决策点（如规划前、提交前）主动进行苏格拉底式提问，确保你考虑周全，而不是盲目执行。
--   **Tab 键驱动 (Tab-to-Execute)**: 你不需要手动输入复杂的指令，只需按下 `Tab` 键确认，流程就会自动向下流动。
+-   **交互式导航 (Interactive Navigation)**: 你不需要手动输入复杂的指令，只需使用**方向键**选择并按 `Enter` (或 Tab+Enter) 确认，流程就会自动向下流动。
 -   **把控权 (Control in Flow)**:
     -   **Mandatory Review**: 在规划完成后，强制暂停供你审查方案。
     -   **Atomic Execution**: 每个开发阶段（Phase）原子化执行，绝不“抢跑”。
@@ -151,7 +151,7 @@ graph TD
 ## ❓ 常见问题 (Troubleshooting)
 
 -   **Q: 为什么流程没有自动弹出下一步提示？**
-    A: FlowState 依赖 Claude Code 的 `RunCommand` 提议机制。如果因为某些原因没有自动弹出，您可以手动输入 `/planning-with-files execute` 或直接按 `Tab` 键尝试。
+    A: FlowState 依赖 Claude Code 的 `RunCommand` 提议机制。如果因为某些原因没有自动弹出，您可以手动输入 `/planning-with-files execute` 或直接按 `Enter` 键尝试。
 -   **Q: TUI 菜单显示异常？**
     A: 请确保您的终端支持 UTF-8 编码和 ANSI 转义序列（推荐使用 iTerm2, VS Code Terminal, 或 Windows Terminal）。
 -   **Q: 如何手动触发特定阶段？**

@@ -77,8 +77,19 @@ type(scope): subject
 
 ## 4. 提交引导 (Commit Handoff)
 
-1.  **Completion**:
-    -   Output the generated messages clearly.
-    -   **Stop**: Do NOT propose any `git commit` command automatically.
-    -   Remind the user to copy the message and commit manually.
-    -   **DO NOT** use `AskUserQuestion`.
+1.  **Reflective Handoff (Interactive Menu)**:
+    -   **Mandatory**: You **MUST** use `AskUserQuestion` to present options (support bilingual).
+    -   **Question**: `Commit Message 已生成。请手动复制并提交。下一步？`
+    -   **Options**:
+        1.  **Done (Finish)**
+            -   **Label**: `Done (完成)`
+            -   **Action**: Wait for user input (or exit).
+        2.  **Regenerate Message**
+            -   **Label**: `Regenerate Message (重新生成)`
+            -   **Action**: Wait for user instructions.
+
+2.  **Action (Interactive Navigation)**:
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to propose the corresponding command (if applicable).
+    -   Example: If user selects "Regenerate Message", you call `RunCommand(command="/commit-message-generator")`.
+    -   This allows the user to simply press **Enter** (or Tab+Enter) to proceed.
+

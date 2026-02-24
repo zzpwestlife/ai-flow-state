@@ -296,19 +296,19 @@ After you have successfully created or updated the planning files (`task_plan.md
 1.  **Summary**: Report project completion.
 2.  **Reflective Handoff (Interactive Menu)**:
     -   First, print the Visual Progress Bar:
-        `[✔ Execute] → [➤ Changelog] → [Commit] → [Done]`
+        `[✔ Execute] → [➤ Review] → [Changelog] → [Commit]`
     -   Then, use `AskUserQuestion` to present the menu:
         -   **Question**: "Project Complete! Next step?"
         -   **Options**:
-            -   "Generate Changelog (Recommended)"
+            -   "Start Code Review (Recommended)"
+            -   "Generate Changelog"
             -   "Generate Commit Message"
-            -   "Update README"
             -   "Done"
 
 3.  **Action**:
-    -   **Option 1 (Changelog)**: use `RunCommand` to propose `/changelog-generator {output_dir}`.
-    -   **Option 2 (Commit)**: use `RunCommand` to propose `/commit-message-generator`.
-    -   **Option 3 (README)**: Ask user for details or propose an edit.
+    -   **Option 1 (Review)**: use `RunCommand` to propose `/review-code {output_dir}`.
+    -   **Option 2 (Changelog)**: use `RunCommand` to propose `/changelog-generator {output_dir}`.
+    -   **Option 3 (Commit)**: use `RunCommand` to propose `/commit-message-generator`.
     -   **Option 4 (Done)**: Output summary and exit.
 
 ## Important: Where Files Go

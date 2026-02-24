@@ -29,23 +29,20 @@ You are a **Changelog Specialist**.
 # Workflow Handoff
 **After the Changelog is successfully generated/updated:**
 
-1.  **Visual Confirmation**:
-    ```text
-    ────────────────────────────────────────────────────────────────────────────────
-    ←  ✔ Update Changelog  ☐ Generate Commit Message  →
+1.  **Reflective Handoff (Interactive Menu)**:
+    -   **Mandatory**: You **MUST** use `AskUserQuestion` to present options (support bilingual).
+    -   **Question**: `Changelog 已更新至 {target_file}。下一步？`
+    -   **Options**:
+        1.  **Generate Commit Message**
+            -   **Label**: `Generate Commit Message (生成提交信息)`
+            -   **Action**: Use `RunCommand` to propose `/commit-message-generator {output_dir}`
+        2.  **Review Changelog**
+            -   **Label**: `Review Changelog (查看/编辑日志)`
+            -   **Action**: Wait for user input.
 
-    Changelog 已更新至 `{target_file}`。下一步：
+2.  **Action (Interactive Navigation)**:
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to propose the corresponding command.
+    -   Do not just display the command. **Call the tool.**
+    -   Example: If user selects "Generate Commit Message", you call `RunCommand(command="/commit-message-generator {output_dir}")`.
+    -   This allows the user to simply press **Enter** (or Tab+Enter) to proceed.
 
-    ❯ 1. 生成提交信息 (Generate Commit Message)
-         Tab-to-Execute: /commit-message-generator {output_dir}
-      2. 退出 (Exit)
-         Reject command, then type: exit
-    ────────────────────────────────────────────────────────────────────────────────
-    ```
-
-2.  **Action**:
-    -   **Zero-Friction (Tab-to-Execute)**: IMMEDIATELY use `RunCommand` to propose Option 1 (`/commit-message-generator {output_dir}`).
-    -   **User Choice**:
-        -   If user accepts (Tab/Enter): Proceed to Commit.
-        -   If user rejects: Exit.
-    -   **DO NOT** use `AskUserQuestion`.

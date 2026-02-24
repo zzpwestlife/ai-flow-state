@@ -60,35 +60,34 @@ If the change touches more than 3 files or crosses multiple modules, run a plann
 *   **Style & Structure**: Follow project formatting tools, file/function size limits
 *   **Architecture**: Core logic isolation, clear layering
 
-**Output Format:**
+**Output Format (Silent Mode):**
 1.  **Visual Progress**: Start output with `[✔ Optimize] → [✔ Plan] → [✔ Execute] → [➤ Review] → [Changelog]`
-2.  Output Markdown report in English containing: Summary, Critical Issues, Improvement Suggestions, Code Style & Conventions, Positive Highlights.
-3.  **Save Report**: If `output_dir` is defined, save the review report to `output_dir/review_report.md`.
-4.  Provide specific code snippets and line numbers when possible.
+2.  **Save Report**: Always save the full Markdown report to `{output_dir}/review_report.md`.
+3.  **Chat Summary**: 
+    -   If report > 20 lines, **DO NOT** print the full report in chat.
+    -   Instead, print a **concise summary** (Critical Issues & Highlights) and the file link: `Full report saved to: [review_report.md](file://...)`.
+    -   If critical issues found, highlight them clearly.
 
 ## Workflow Handoff
 After the review is complete:
 
-1.  **Reflective Handoff**:
-    -   Do not just ask "Yes/No". Use the TUI style to offer options based on your review findings.
-    -   **Format**:
-        ```text
-        ────────────────────────────────────────────────────────────────────────────────
-        ←  ☐ Fix Issues  ☐ Manual Check  ✔ Generate Changelog  →
+1.  **Reflective Handoff (Interactive Menu)**:
+    -   **Mandatory**: You **MUST** use `AskUserQuestion` to present options (support bilingual).
+    -   **Question**: `代码审查完成 (Report saved to {output_dir}/review_report.md)。下一步？`
+    -   **Options**:
+        1.  **Generate Changelog**
+            -   **Label**: `Generate Changelog (生成变更日志)`
+            -   **Action**: Use `RunCommand` to propose `/changelog-generator {output_dir}`
+        2.  **Fix Critical Issues**
+            -   **Label**: `Fix Critical Issues (修复关键问题)`
+            -   **Action**: Use `RunCommand` to propose `/planning-with-files plan {output_dir}` (to plan fixes)
+        3.  **Manual Verification**
+            -   **Label**: `Manual Verification (手动验证)`
+            -   **Action**: Wait for user input.
 
-        代码审查完成 (Report saved to {output_dir}/review_report.md)。建议下一步：
+2.  **Action (Interactive Navigation)**:
+    -   **IMMEDIATELY** after the user selects an option, you **MUST** use `RunCommand` to propose the corresponding command.
+    -   Do not just display the command. **Call the tool.**
+    -   Example: If user selects "Generate Changelog", you call `RunCommand(command="/changelog-generator {output_dir}")`.
+    -   This allows the user to simply press **Enter** (or Tab+Enter) to proceed.
 
-        ❯ 1. 生成变更日志 (Generate Changelog)
-             Tab-to-Execute: /changelog-generator {output_dir}
-          2. 修复关键问题 (Fix Critical Issues)
-             Reject command, then type: /planning-with-files:plan {output_dir}
-          3. 手动验证 (Manual Verification)
-             Reject command, then type: exit
-        ────────────────────────────────────────────────────────────────────────────────
-        ```
-2.  **Action**:
-    -   **Zero-Friction (Tab-to-Execute)**: IMMEDIATELY use `RunCommand` to propose Option 1 (`/changelog-generator {output_dir}`).
-    -   **User Choice**:
-        -   If user accepts (Tab/Enter): Proceed to Changelog.
-        -   If user rejects: They can type other commands (e.g., `/planning-with-files:plan` to fix issues).
-    -   **DO NOT** use `AskUserQuestion`.

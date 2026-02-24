@@ -14,6 +14,7 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 ## 1. 核心原则 (Core Principles)
 - **Atomic Execution (原子化执行)**: 每次交互仅执行**一个**步骤 (Step) 或任务阶段 (Phase)。严禁跨越自动执行。
 - **Interactive Handoff (交互式交接)**: 每个 Step/Phase 结束后，**必须**展示 TUI 菜单并等待用户指令。
+- **Interactive Navigation (交互式导航)**: 所有的 Handoff 必须使用 `AskUserQuestion` 提供方向键选择，然后自动提议下一步，确保用户只需使用 **方向键 + Enter** 即可继续。
 - **File-First (文件优先)**: 所有长内容（>10 行）必须写入文件，聊天窗口仅保留摘要。 
 - **Source of Truth (单一真理)**: `task_plan.md` 是任务状态的唯一真理。必须先更新文件，再宣称 Phase 完成。
 
@@ -46,6 +47,11 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 ## 3. TUI 交互标准 (Interaction Standards)
 
 **Universal Rule**: 每一个工作流步骤 (Step) 结束后，**必须**展示 TUI 菜单并等待用户指令。严禁自动跳过。所有菜单必须支持**中英双语**。
+
+**关键机制 (Key Mechanism): Interactive Navigation**
+1. **Ask**: 使用 `AskUserQuestion` 提供**方向键 (Arrow Keys)** 选择。
+2. **Propose**: 用户选择后，**必须**立即使用 `RunCommand` 提议下一步命令。
+3. **User Action**: 用户只需按 **Enter** (或 Tab+Enter) 即可确认执行。
 
 ### 3.1 Step 1: Optimization -> Planning
 - **Trigger**: `prompt.md` 生成完毕。
