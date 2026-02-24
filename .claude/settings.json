@@ -1,0 +1,49 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/claudeception-activator.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": []
+  },
+  "permissions": {
+    "defaultMode": "plan",
+    "allow": [
+      "Read(*.go)",
+      "Read(*.py)",
+      "Read(*.php)",
+      "Read(*.js)",
+      "Read(*.ts)",
+      "Read(*.md)",
+      "Read(.gitignore)",
+      "Grep",
+      "Glob",
+      "LS",
+      "Bash(git:status)",
+      "Bash(git:log)",
+      "Bash(git:diff)",
+      "Bash(go:vet:*)",
+      "Bash(flake8:*)"
+    ],
+    "ask": [
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Bash(git:add:*)"
+    ],
+    "deny": [
+      "Read(./.env*)",
+      "Read(*.pem)",
+      "Read(*.key)",
+      "Bash(rm:*)",
+      "Bash(git:commit:*)",
+      "Bash(git:push:*)"
+    ]
+  }
+}

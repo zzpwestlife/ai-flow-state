@@ -1,0 +1,26 @@
+{
+  "name": "FlowState",
+  "version": "1.0.0",
+  "description": "A Zero-Friction Workflow plugin for Claude Code. Keep your flow unbroken.",
+  "author": "Claude Code Community",
+  "license": "MIT",
+  "repository": "https://github.com/learn-claude-code/smart-guided-workflow",
+  "components": {
+    "commands": [
+      "optimize-prompt",
+      "review-code",
+      "changelog-generator",
+      "commit-message-generator"
+    ],
+    "skills": [
+      "planning-with-files",
+      "prompt-to-plan-workflow",
+      "skill-architect",
+      "review-code",
+      "changelog-generator"
+    ],
+    "agents": [
+      "code-reviewer"
+    ]
+  }
+}

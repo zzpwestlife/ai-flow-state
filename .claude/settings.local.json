@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__sequential-thinking__sequentialthinking",
+      "mcp__web-search-prime__webSearchPrime",
+      "mcp__fetch__fetch",
+      "Bash(npm install:*)",
+      "Bash(npm run build)",
+      "Skill(optimize-prompt)",
+      "Bash(tree:*)",
+      "Skill(planning-with-files:planning-with-files)",
+      "Bash(test:*)",
+      "Bash(python3:*)",
+      "Bash(tee:*)",
+      "Bash(wc:*)",
+      "Bash(/Users/joeyzou/Code/OpenSource/learn-claude-code/.claude/skills/review-code/scripts/get-diff.sh)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(/planning-with-files plan:*)"
+    ]
+  }
+}
