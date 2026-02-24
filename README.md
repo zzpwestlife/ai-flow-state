@@ -1,4 +1,4 @@
-# FlowState (Zero-Friction Workflow)
+# FlowState (Zero-Friction AI Workflow)
 
 ### 🌊 FlowState: Keep Your Flow Unbroken
 
@@ -39,6 +39,19 @@
     ]
   }
 }
+```
+
+### ⚙️ 配置文件结构 (Configuration Structure)
+
+本插件采用模块化的配置结构，确保规则清晰且易于维护。Claude Code 启动时会按照以下路径加载配置：
+
+```mermaid
+graph TD
+    A[CLAUDE.md<br/>(项目根目录入口)] -->|@.claude/AGENTS.md| B[.claude/AGENTS.md<br/>(主配置)]
+    B -->|@.claude/constitution.md| C[.claude/constitution.md<br/>(核心原则)]
+    B -->|@.claude/rules/workflow-protocol.md| D[.claude/rules/workflow-protocol.md<br/>(工作流规范)]
+    B -->|@.claude/rules/coding-standards.md| E[.claude/rules/coding-standards.md<br/>(编码标准)]
+    B -->|@.claude/rules/operational-standards.md| F[.claude/rules/operational-standards.md<br/>(操作规范)]
 ```
 
 ## 🎮 交互模式 (Interaction Model)
