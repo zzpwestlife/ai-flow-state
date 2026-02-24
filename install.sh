@@ -21,6 +21,8 @@ mkdir -p "$CLAUDE_ROOT/commands"
 mkdir -p "$CLAUDE_ROOT/skills"
 mkdir -p "$CLAUDE_ROOT/agents"
 mkdir -p "$CLAUDE_ROOT/hooks"
+mkdir -p "$CLAUDE_ROOT/docs"
+mkdir -p "$CLAUDE_ROOT/audit"
 
 # Backup function
 backup_file() {
@@ -33,34 +35,55 @@ backup_file() {
     fi
 }
 
-# Copy files
-echo -e "${BLUE}→ Installing commands...${NC}"
-if [ -d ".claude/commands" ]; then
-    cp -R .claude/commands/* "$CLAUDE_ROOT/commands/"
+# 1. Install CLAUDE.md from root (special case as it's outside .claude)
+echo -e "${BLUE}→ Installing core documentation (CLAUDE.md)...${NC}"
+if [ -f "CLAUDE.md" ]; then
+    cp "CLAUDE.md" "$CLAUDE_ROOT/CLAUDE.md"
+    echo -e "${GREEN}  ✅ CLAUDE.md installed${NC}"
 fi
 
-echo -e "${BLUE}→ Installing skills...${NC}"
-if [ -d ".claude/skills" ]; then
-    cp -R .claude/skills/* "$CLAUDE_ROOT/skills/"
+# 2. Install ALL content from .claude/ directory
+echo -e "${BLUE}→ Installing content from .claude/ directory...${NC}"
+
+# Enable nullglob to handle empty matches gracefully
+shopt -s nullglob
+
+for item in .claude/*; do
+    name=$(basename "$item")
+
+    # Skip files that need special handling or should be ignored
+    if [[ "$name" == "settings.json" ]]; then continue; fi
+    if [[ "$name" == "settings.local.json" ]]; then continue; fi
+    if [[ "$name" == "changelog_config.json" ]]; then continue; fi
+
+    # Recursive copy for everything else
+    if [ -e "$item" ]; then
+        # For directories, cp -R merges/overwrites contents
+        cp -R "$item" "$CLAUDE_ROOT/"
+        echo -e "${GREEN}  ✅ $name installed${NC}"
+    fi
+done
+
+# Disable nullglob
+shopt -u nullglob
+
+# 3. Handle changelog_config.json (with backup)
+if [ -f ".claude/changelog_config.json" ]; then
+    echo -e "${BLUE}→ Installing changelog_config.json...${NC}"
+    if [ -f "$CLAUDE_ROOT/changelog_config.json" ]; then
+        backup_file "$CLAUDE_ROOT/changelog_config.json"
+    fi
+    cp ".claude/changelog_config.json" "$CLAUDE_ROOT/changelog_config.json"
+    echo -e "${GREEN}  ✅ changelog_config.json installed${NC}"
 fi
 
-echo -e "${BLUE}→ Installing agents...${NC}"
-if [ -d ".claude/agents" ]; then
-    cp -R .claude/agents/* "$CLAUDE_ROOT/agents/"
-fi
-
-echo -e "${BLUE}→ Installing hooks...${NC}"
-if [ -d ".claude/hooks" ]; then
-    cp -R .claude/hooks/* "$CLAUDE_ROOT/hooks/"
-fi
-
-# Handle settings.json with user interaction
+# 4. Handle settings.json with user interaction
 if [ -f ".claude/settings.json" ]; then
     echo -e "${BLUE}→ Checking settings.json...${NC}"
 
     if [ -f "$CLAUDE_ROOT/settings.json" ]; then
         echo ""
-        echo -e "${YELLOW}⚠️  Existing settings.json found at:$CLAUDE_ROOT/settings.json${NC}"
+        echo -e "${YELLOW}⚠️  Existing settings.json found at: $CLAUDE_ROOT/settings.json${NC}"
         echo "Please choose an option:"
         echo "  1) Keep existing (skip)"
         echo "  2) Backup and replace"
@@ -97,16 +120,6 @@ if [ -f ".claude/settings.json" ]; then
         cp .claude/settings.json "$CLAUDE_ROOT/settings.json"
         echo -e "${GREEN}  ✅ settings.json installed${NC}"
     fi
-fi
-
-# Install configuration files
-echo -e "${BLUE}→ Installing configuration files...${NC}"
-if [ -f ".claude/changelog_config.json" ]; then
-    if [ -f "$CLAUDE_ROOT/changelog_config.json" ]; then
-        backup_file "$CLAUDE_ROOT/changelog_config.json"
-    fi
-    cp .claude/changelog_config.json "$CLAUDE_ROOT/changelog_config.json"
-    echo -e "${GREEN}  ✅ changelog_config.json installed${NC}"
 fi
 
 # Summary

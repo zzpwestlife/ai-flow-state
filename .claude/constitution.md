@@ -122,6 +122,17 @@ This constitution applies to all technology stacks under this project (Go, PHP, 
 
 ---
 
+## Article 12: Workflow Control & Handoff Principle - Non-Negotiable
+
+**Core:** Human-in-the-loop control is absolute. AI must pause for confirmation at critical boundaries.
+
+- **12.1 (Atomic Execution):** Tasks must be broken down into atomic steps (Optimization, Planning, Execution Phase, Review, Changelog). AI is strictly prohibited from executing more than one step/phase per turn.
+- **12.2 (Mandatory Handoff):** Upon completing ANY workflow step or task phase, AI **must** stop execution and present a TUI (Text User Interface) menu using `AskUserQuestion`.
+- **12.3 (Explicit Continuation):** AI cannot proceed to the next step/phase without explicit user selection (e.g., "Continue Execution" or "Next Step").
+- **12.4 (Bilingual Options):** All handoff menus must provide bilingual (English/Chinese) descriptions to ensure clarity.
+
+---
+
 ## Governance
 
 This constitution has the highest priority. Before implementation, all code modifications must undergo "Constitution Check".

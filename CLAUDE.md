@@ -45,17 +45,71 @@ Usage: It redirects the AI to the primary configuration file, `AGENTS.md`.
 
 ## 3. TUI 交互标准 (Interaction Standards)
 
-### Execution Step TUI (Task Phase Handoff)
-All Task Phase 完成后的 Handoff 必须使用 `AskUserQuestion` 供箭头选择：
+**Universal Rule**: 每一个工作流步骤 (Step) 结束后，**必须**展示 TUI 菜单并等待用户指令。严禁自动跳过。所有菜单必须支持**中英双语**。
 
-1. **Continue Execution** (Proceed to next phase)
-   - Use `RunCommand` to propose `/planning-with-files execute`.
-2. **Pause / Review**
-   - Wait for user instructions.
-3. **Commit Changes**
-   - (Removed per user request)
+### 3.1 Step 1: Optimization -> Planning
+- **Trigger**: `prompt.md` 生成完毕。
+- **Menu Options**:
+  1. **Start Planning**
+     - **Label**: `Start Planning (进入规划阶段)`
+     - **Action**: Propose `/planning-with-files plan`
+  2. **Refine Prompt**
+     - **Label**: `Refine Prompt (继续优化)`
+     - **Action**: Wait for user input
+
+### 3.2 Step 2: Planning -> Execution
+- **Trigger**: `task_plan.md` 生成完毕。
+- **Menu Options**:
+  1. **Execute Plan**
+     - **Label**: `Execute Plan (开始执行计划)`
+     - **Action**: Propose `/planning-with-files execute`
+  2. **Review Plan**
+     - **Label**: `Review Plan (审查计划)`
+     - **Action**: Wait for user input
+
+### 3.3 Step 3: Execution Loop (Phase Handoff)
+- **Trigger**: 单个 Task Phase 完成 (Phase Completed)。
+- **Menu Options**:
+  1. **Continue Execution**
+     - **Label**: `Continue Execution (Start Next Phase)`
+     - **Description**: `开始 [Next Phase Title]` (Dynamic)
+     - **Action**: Propose `/planning-with-files execute`
+  2. **Pause / Review**
+     - **Label**: `Pause / Review`
+     - **Description**: `暂停执行，审查代码`
+     - **Action**: Wait for user input
+
+### 3.4 Step 3 -> Step 4: Execution Done -> Review
+- **Trigger**: 所有 Phase 完成 (All Phases Complete)。
+- **Menu Options**:
+  1. **Proceed to Code Review**
+     - **Label**: `Proceed to Code Review (进入代码审查)`
+     - **Action**: Propose `/review-code`
+  2. **Generate Changelog**
+     - **Label**: `Generate Changelog (生成变更日志)`
+     - **Action**: Propose `/changelog-generator`
+
+### 3.5 Step 4: Review -> Changelog
+- **Trigger**: 代码审查报告生成完毕。
+- **Menu Options**:
+  1. **Generate Changelog**
+     - **Label**: `Generate Changelog (生成变更日志)`
+     - **Action**: Propose `/changelog-generator`
+  2. **Fix Issues**
+     - **Label**: `Fix Issues (修复问题)`
+     - **Action**: Wait for user input
+
+### 3.6 Step 5: Changelog -> Commit
+- **Trigger**: CHANGELOG.md 更新完毕。
+- **Menu Options**:
+  1. **Generate Commit Message**
+     - **Label**: `Generate Commit Message (生成提交信息)`
+     - **Action**: Propose `/commit-message-generator`
+  2. **Edit Changelog**
+     - **Label**: `Edit Changelog (编辑日志)`
+     - **Action**: Wait for user input
 
 ## 4. 验证与强制机制 (Enforcement)
 - **Hook Verification**: 每次 `Write` 操作后，`check-complete.sh` 会自动运行。
-- **Stop Signal**: 如果脚本检测到 Task Phase 完成，会输出 `🛑 STOP EXECUTION NOW 🛑`。
+- **Stop Signal**: 如果脚本检测到 Task Phase 完成，会输出 `🛑 STOP EXECUTION NOW 🛑` 并显示下一阶段名称。
 - **Protocol**: 见到此信号，**必须**立即停止当前推理链，使用 `AskUserQuestion` 展示 TUI 菜单。

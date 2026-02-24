@@ -95,6 +95,14 @@ fi
 if [ "$COMPLETE" -gt "$PREV_COMPLETE" ]; then
     echo "$TIMESTAMP: Phase $COMPLETE completed (Previous: $PREV_COMPLETE)" >> "$AUDIT_LOG"
     echo "EVENT: PHASE_COMPLETE"
+    
+    # Extract next phase title
+    NEXT_NUM=$((COMPLETE + 1))
+    NEXT_PHASE=$(grep "^### Phase" "$PLAN_FILE" | sed -n "${NEXT_NUM}p" | sed 's/^### //')
+    if [ -n "$NEXT_PHASE" ]; then
+        echo "NEXT_PHASE: $NEXT_PHASE"
+    fi
+
     echo ""
     echo "🛑🛑🛑 STOP EXECUTION NOW 🛑🛑🛑"
     echo "Phase $COMPLETE is marked as COMPLETE."
