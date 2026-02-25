@@ -20,51 +20,61 @@
     ```
     *(安装脚本会将插件内容安装到 `~/.claude/` 目录下，建议先备份原目录文件)*
 
-### 配置[可选] (Configuration)
-
-本项目依赖 `~/.claude/settings.json` (或者 `~/.claude/ft-settings.json`) 中的钩子配置来实现自动触发。请确保您的配置文件包含以下内容（或手动合并）：
-
-```json
-{
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/claudeception-activator.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
 ### ⚙️ 配置文件结构 (Configuration Structure)
 
 本插件采用模块化的配置结构，确保规则清晰且易于维护。Claude Code 启动时会按照以下路径加载配置：
 
 ```mermaid
 graph TD
-    A[CLAUDE.md<br/>(项目根目录入口)] -->|@.claude/AGENTS.md| B[.claude/AGENTS.md<br/>(主配置)]
-    B -->|@.claude/constitution.md| C[.claude/constitution.md<br/>(核心原则)]
-    B -->|@.claude/rules/workflow-protocol.md| D[.claude/rules/workflow-protocol.md<br/>(工作流规范)]
-    B -->|@.claude/rules/coding-standards.md| E[.claude/rules/coding-standards.md<br/>(编码标准)]
-    B -->|@.claude/rules/operational-standards.md| F[.claude/rules/operational-standards.md<br/>(操作规范)]
+    A["CLAUDE.md<br/>(项目根目录入口)"] -->|"@.claude/AGENTS.md"| B[".claude/AGENTS.md<br/>(主配置)"]
+    B -->|"@.claude/constitution.md"| C[".claude/constitution.md<br/>(核心原则)"]
+    B -->|"@.claude/rules/workflow-protocol.md"| D[".claude/rules/workflow-protocol.md<br/>(工作流规范)"]
+    B -->|"@.claude/rules/coding-standards.md"| E[".claude/rules/coding-standards.md<br/>(编码标准)"]
+    B -->|"@.claude/rules/operational-standards.md"| F[".claude/rules/operational-standards.md<br/>(操作规范)"]
 ```
 
 ## 🎮 交互模式 (Interaction Model)
 
-本插件采用 **Zero-Friction (零摩擦)** 交互设计：
+本插件采用 **Zero-Friction (零摩擦)** 交互设计，确保您的心流不被打断：
 
-1.  **方向键导航**: 所有选项菜单均通过 `AskUserQuestion` 提供，支持使用 **方向键 (↑/↓)** 选择，**Enter** 确认。
-2.  **一键直达**: 确认选择后，系统将自动执行后续命令 (无需二次确认)，确保心流不被中断。
-3.  **安全保护**: 只有涉及高风险操作 (如 `git push`) 时才会要求额外确认或手动执行。
+1.  **全流程智能引导 (Auto-Guidance)**:
+    -   系统会在每个任务阶段完成后，**主动提示**下一步的最佳操作。
+    -   您无需记忆复杂的命令或参数，只需跟随系统的引导即可。
+
+2.  **方向键导航 (Arrow Key Navigation)**:
+    -   所有选项菜单均通过交互式列表提供。
+    -   使用 **方向键 (↑/↓/←/→)** 选择选项。
+    -   使用 **Enter** 键确认执行。
+
+3.  **一键直达 (One-Click Execution)**:
+    -   确认选择后，系统将自动构建并执行后续命令。
+    -   无需二次确认，无需手动复制粘贴。
+
+4.  **安全保护**: 只有涉及高风险操作 (如 `git push`) 时才会要求额外确认。
 
 ## 🚀 使用方法
 
 只需执行首个命令，系统将在每个阶段完成后自动引导进入下一步。
+
+### 🌟 体验示例 (The Flow Experience)
+
+您只需要启动任务，剩下的交给 FlowState：
+
+```bash
+/optimize-prompt "实现一个 Python 斐波那契数列工具" fib
+```
+
+**后续的所有操作，您只需要使用 ⬆️⬇️ 和 Enter 即可完成：**
+
+```text
+? [FlowState] Phase 1 提示词优化已完成。下一步做什么？ (Use arrow keys)
+ » 🟢 继续执行 (Execute Plan)
+   ⚪️ 查看生成的文件 (Review Files)
+   ⚪️ 修改需求 (Refine Prompt)
+   ⚪️ 退出 (Exit)
+```
+
+**真正的 "Hands-free" 体验，让您专注于决策而非命令。**
 
 ### 📂 统一生成物管理 (Artifact Management)
 
@@ -132,10 +142,10 @@ graph TD
 
 1.  **`/optimize-prompt`** (Step 1): 
     -   **Socratic Analysis**: 采用苏格拉底提问法，深度挖掘需求。
-    -   **Output**: 生成优化后的 Prompt。
+    -   **Output**: 生成优化后的 `prompt.md`。
 2.  **`/planning-with-files plan`** (Step 2): 
     -   **Phase 0 Interview**: 规划前强制进行架构与技术栈确认。
-    -   **Output**: 生成 `task_plan.md`。
+    -   **Output**: 生成 `task_plan.md` 等三个文件。
 3.  **`/planning-with-files execute`** (Step 3): 
     -   **Strict Atomic Execution**: 每次**严格**只执行一个任务阶段 (Task Phase)，绝不自动进入下一阶段。
     -   **Mandatory TUI Handoff**: 每阶段完成后必须暂停，显示 TUI 菜单等待用户明确指令（继续/暂停/提交）。
